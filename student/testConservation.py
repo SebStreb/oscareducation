@@ -134,10 +134,12 @@ class TestPersistance(unittest.TestCase):
         #driver.find_element_by_link_text(test.get("nomDuTest")).click()
         driver.find_element_by_class_name("list-group-item")
         driver.find_element_by_xpath("(//a[@class='list-group-item'])[last()]").send_keys(Keys.ENTER)
-        driver.find_element_by_xpath("//button[@type='submit']").send_keys(Keys.ENTER)
+        #driver.find_element_by_xpath("//button[@type='submit']").send_keys(Keys.ENTER)
+
+
+
+
         time.sleep(7)
-
-
     def tearDown(self):
         self.driver.close()
 
