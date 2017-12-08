@@ -263,24 +263,25 @@
                                                     =y
                                                     )
                                         -elif type == "fill-text-blanks"
-                                          -for ans in question.get_answer.answers 
+                                          -for ans in question.get_answer.answers
+                                            -# =answer.get_answers.0.response.0
                                             %tr
                                               %td{colspan: 2}
                                                 -with inloop_counter0=forloop.counter0
-                                                  -for stu_ans in student_answer # For every answer of the student
-                                                    -if stu_ans.0 == inloop_counter0 # If the number of the answer is the correct one
+                                                  -for stu_ans in student_answer
+                                                    -if stu_ans.0 == inloop_counter0
                                                       -for ans_to_get in answer.get_answers_blanks_tab
                                                         -if ans_to_get.0 == nbrQ
                                                           -for a in ans_to_get.1
                                                             -if a.0 == inloop_counter0
                                                               .answers-panel.panel{class: "{% if a.1.correct_blank == 1 %}panel-success{% elif a.1.correct_blank == 0 %}panel-danger{% else %}panel-warning{% endif %}"}
                                                                 .panel-heading
-                                                                  =ans.text.0 # Print the text of the blank
+                                                                  =ans.text.0
                                                                 .panel-body.answers-panel
                                                                   %table.answers-table
                                                                     %tr
                                                                       %td.right-border{width: "50%"}
-                                                                        -if ans.type != "text" # Print the student answer according to his type
+                                                                        -if ans.type != "text"
                                                                           \\(
                                                                             =stu_ans.1.0
                                                                           \\)
@@ -288,9 +289,9 @@
                                                                         -else
                                                                           =stu_ans.1.0
                                                                       %td{width: "50%", display: "block"}
-                                                                        -for answ in ans.answers # For every possible correct answers
+                                                                        -for answ in ans.answers
                                                                             %ul
-                                                                              -if ans.type != "text" # Print the correct answers according to his type
+                                                                              -if ans.type != "text"
                                                                                 %li
                                                                                   \\(
                                                                                   =answ.latex
@@ -299,13 +300,14 @@
                                                                               -else
                                                                                 %li=answ.text
 
+
                                         -elif type == "fill-table-blanks"
                                           -for ans in question.get_answer.answers
                                             %tr
                                               %td{colspan: 2}
                                                 -with inloop_counter0=forloop.counter0
-                                                  -for stu_ans in student_answer # For every answer of the student
-                                                    -if stu_ans.0 == inloop_counter0 # If the number of the answer is the correct one
+                                                  -for stu_ans in student_answer
+                                                    -if stu_ans.0 == inloop_counter0
                                                       -for ans_to_get in answer.get_answers_blanks_tab
                                                         -if ans_to_get.0 == nbrQ
                                                           -for a in ans_to_get.1
@@ -314,12 +316,12 @@
                                                                 .panel-heading
                                                                   -with y=forloop.counter|stringformat:"s"
                                                                     -with template="#["|add:y|add:"]#"
-                                                                      =template # Print the blank number
+                                                                      =template
                                                                 .panel-body.answers-panel
                                                                   %table.answers-table
                                                                     %tr
                                                                       %td.right-border{width: "50%"}
-                                                                        -if ans.type != "text" # Print the student answer according to his type
+                                                                        -if ans.type != "text"
                                                                           \\(
                                                                             =stu_ans.1.0
                                                                           \\)
@@ -327,9 +329,9 @@
                                                                         -else
                                                                           =stu_ans.1.0
                                                                       %td{width: "50%", display: "block"}
-                                                                        -for answ in ans.answers # For every possible correct answers
+                                                                        -for answ in ans.answers
                                                                             %ul
-                                                                              -if ans.type != "text" # Print the correct answers according to his type
+                                                                              -if ans.type != "text"
                                                                                 %li
                                                                                   \\(
                                                                                   =answ.latex

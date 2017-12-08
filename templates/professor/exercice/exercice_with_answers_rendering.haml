@@ -52,14 +52,14 @@
           %p
             %i A corriger par le professeur
       -elif answer.type == "fill-text-blanks"
-        -for ans in answer.answers # For every answers that need to be filled
-          =ans.text.0 # Print the text before the blank
+        -for ans in answer.answers
+          =ans.text.0
           %input{id: "{{ forloop.counter0 }}", name: "{{ forloop.counter0 }}", value: "#[{{ forloop.counter }}]#", type: "text", disabled: "disabled", style: "text-align:center"}
-          =ans.text.1 # Print the text after the blank
+          =ans.text.1
           %div{style: "margin-left: 20px; margin-top: 10px"}
             %p Réponses correctes :
             %ul
-              -for answ in ans.answers # For every possible correct answers
+              -for answ in ans.answers
                 -if ans.type != "text"
                   %li \({{answ.latex}}\)
                   -if user.is_superuser
@@ -74,18 +74,18 @@
                 -for row in answer.table
                   %tr
                   -for col in row
-                    -if col.blank # If it's a blank
+                    -if col.blank
                       %td
                         %input{id: "fill-{{ toploop_counter0 }}-{{ forloop.counter0 }}", name: "fill-{{ toploop_counter0 }}-{{ forloop.counter0 }}", type: "text", value: "{{ col.text }}", autocomplete: "off",  disabled: "disabled", style: "text-align:center;width:100%"}
-                    -else # if it's not a blank
-                      %td= col.text # Print the text of the cell
+                    -else
+                      %td= col.text
 
           -for ans in answer.answers
             %input{id: "{{ forloop.counter0 }}", name: "{{ forloop.counter0 }}", value: "#[{{ forloop.counter }}]#", type: "text", disabled: "disabled", style: "text-align:center"}
             %div{style: "margin-left: 20px; margin-top: 10px"}
               %p Réponses correctes :
               %ul
-                -for answ in ans.answers # For every possible correct answers
+                -for answ in ans.answers
                   -if ans.type != "text"
                     %li \({{answ.latex}}\)
                     -if user.is_superuser
