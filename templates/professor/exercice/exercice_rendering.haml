@@ -6,7 +6,7 @@
   -csrf_token
   -for label, question in questions.items
     .form-group
-      -if question.type != "fill-text-blanks"
+      -if question.type != "fill-text-blanks" # There is no description in a fill-text-blanks question
         %label{for: "{{ forloop.counter0 }}"}= label|safe
       -if question.type == "text"
         %input.form-control{id: "{{ forloop.counter0 }}", name: "{{ forloop.counter0 }}", type: "text", autocomplete: "off", disabled:"disabled"}
@@ -39,17 +39,17 @@
         %i A corriger par le professeur
       -elif question.type == "fill-text-blanks"
         -with toploop_counter0=forloop.counter0
-          -for ans in question.answers
-            =ans.text.0
+          -for ans in question.answers # For every answers that need to be filled
+            =ans.text.0 # Print the text before the blank
             -with inloop_counter0=forloop.counter0
-              -if ans.type == "math" or ans.type  == "math-simple" or ans.type  == "math-advanced"
+              -if ans.type == "math" or ans.type  == "math-simple" or ans.type  == "math-advanced" # The answer box according to the answer type
                 %span
                   %textarea.keyboard
                   %span.mathquill{data-keyboard-type: "{{ ans.type }}", style: "width:241px"}
                   %input.hidden-math-form{id: "fill-{{ toploop_counter0 }}-{{ inloop_counter0 }}", name: "fill-{{ toploop_counter0 }}-{{ inloop_counter0 }}", type: "text", autocomplete: "off",  disabled:"disabled"}
               -else
                 %input{id: "fill-{{ toploop_counter0 }}-{{ inloop_counter0 }}", name: "fill-{{ toploop_counter0 }}-{{ inloop_counter0 }}", type: "text", autocomplete: "off",  disabled:"disabled"}
-            =ans.text.1
+            =ans.text.1 # Print the text after the blank
       -elif question.type == "fill-table-blanks"
         -with toploop_counter0=forloop.counter0
           %table.table.table-bordered{style: "table-layout:fixed"}
@@ -57,17 +57,17 @@
             -for row in question.table
               %tr
               -for col in row
-                -if col.blank
+                -if col.blank # If it's a blank
                   %td
-                    -if col.blank.type == "math" or col.blank.type  == "math-simple" or col.blank.type  == "math-advanced"
+                    -if col.blank.type == "math" or col.blank.type  == "math-simple" or col.blank.type  == "math-advanced" # The answer box according to the answer type
                       %span
                         %textarea.keyboard
                         %span.mathquill{data-keyboard-type: "{{ col.blank.type }}", style: "width:100%"}
                         %input.hidden-math-form{id: "fill-{{ toploop_counter0 }}-{{ col.index }}", name: "fill-{{ toploop_counter0 }}-{{ col.index }}", type: "text", autocomplete: "off",  disabled:"disabled", style: "width:100%"}
                     -else
                       %input{id: "fill-{{ toploop_counter0 }}-{{ col.index }}", name: "fill-{{ toploop_counter0 }}-{{ col.index }}", type: "text", autocomplete: "off",  disabled:"disabled", style: "width:100%"}
-                -else
-                  %td= col.text
+                -else # if it's not a blank
+                  %td= col.text # Print the text of the cell
       -else
         ="test"
 

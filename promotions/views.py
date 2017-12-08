@@ -1409,14 +1409,14 @@ def exercice_validation_form_validate_exercice(request):
             }
 
         elif question["type"] == "fill-text-blanks":
-            temp = re.split(r'#\[\d+\]#',question["instructions"])
+            temp = re.split(r'#\[\d+\]#',question["instructions"]) # Split into strings delimited by the #[Number]# template
 
-            i = 0
-            for ans in question["answers"]:
-                if i == len(temp)-2:
+            i = 0 # This is used for the views
+            for ans in question["answers"]: # For every blanks
+                if i == len(temp)-2: # For the last blank, add the last splitted string
                     ans["text"] = [temp[i],temp[i+1]]
                 else:
-                    ans["text"] = [temp[i],""]
+                    ans["text"] = [temp[i],""] # Add the text associated to the blank
                 i += 1
 
             questions[question["instructions"]] = {
@@ -1425,16 +1425,16 @@ def exercice_validation_form_validate_exercice(request):
             }
         elif question["type"] == "fill-table-blanks":
 
-            i = 0
+            i = 0 # This is used for the views
             new_table = []
-            for row in question["table"]:
+            for row in question["table"]: # For every cells
                 temp = []
                 for cell in row:
                     closed_list = {}
-                    closed_list["index"]=i
-                    closed_list["text"]=cell
-                    if re.match(r'#\[\d+\]#',cell) is not None:
-                        closed_list["blank"]=question["answers"][i]
+                    closed_list["index"]=i # Add a field with the index of the cell
+                    closed_list["text"]=cell # Add a filed with the text of the cell
+                    if re.match(r'#\[\d+\]#',cell) is not None: # If there is a blank in the cell
+                        closed_list["blank"]=question["answers"][i] # Add a field with the answer of the blank
                         i+=1
                     temp.append(closed_list)
                 new_table.append(temp)
@@ -1558,14 +1558,14 @@ def exercice_validation_form_submit(request, pk=None):
                     "answers": [x["text"] for x in question["answers"]],
                 }
             elif question["type"] == "fill-text-blanks":
-                temp = re.split(r'#\[\d+\]#',question["instructions"])
+                temp = re.split(r'#\[\d+\]#',question["instructions"]) # Split into strings delimited by the #[Number]# template
 
-                i = 0
-                for ans in question["answers"]:
-                    if i == len(temp)-2:
+                i = 0 # This is used for the views
+                for ans in question["answers"]: # For every blanks
+                    if i == len(temp)-2: # For the last blank, add the last splitted string
                         ans["text"] = [temp[i],temp[i+1]]
                     else:
-                        ans["text"] = [temp[i],""]
+                        ans["text"] = [temp[i],""] # Add the text associated to the blank
                     i += 1
 
                 new_question_answers = {
@@ -1574,16 +1574,16 @@ def exercice_validation_form_submit(request, pk=None):
                 }
             elif question["type"] == "fill-table-blanks":
 
-                i = 0
+                i = 0 # This is used for the views
                 new_table = []
-                for row in question["table"]:
+                for row in question["table"]: # For every cells
                     temp = []
                     for cell in row:
                         closed_list = {}
-                        closed_list["index"]=i
-                        closed_list["text"]=cell
-                        if re.match(r'#\[\d+\]#',cell) is not None:
-                            closed_list["blank"]=question["answers"][i]
+                        closed_list["index"]=i # Add a field with the index of the cell
+                        closed_list["text"]=cell # Add a filed with the text of the cell
+                        if re.match(r'#\[\d+\]#',cell) is not None: # If there is a blank in the cell
+                            closed_list["blank"]=question["answers"][i] # Add a field with the answer of the blank
                             i+=1
                         temp.append(closed_list)
                     new_table.append(temp)
