@@ -21,7 +21,7 @@ n3 = "27" # Number of a test that we have not finished
 n4 = "21" # Number of a test. Used to test the access without logging
 n5 = "28"
 n6 = "134" # Number of lesson
-n7 = 1
+#n7 = 1
 
 
 class TestStudentJS(unittest.TestCase):
