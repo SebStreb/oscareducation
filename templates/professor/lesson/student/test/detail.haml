@@ -299,36 +299,7 @@
                                                                                   (code latex : <code>{{ answ.latex }}</code>)
                                                                               -else
                                                                                 %li=answ.text
-                                            -# %tr
-                                            -#   %td{colspan: 2}
-                                            -#     .answers-panel.panel{class: "{% if correct == 1 %}panel-success{% elif correct == 0 %}panel-danger{% else %}panel-warning{% endif %}"}
-                                            -#       .panel-heading
-                                            -#         =ans.text.0
-                                            -#       .panel-body.answers-panel
-                                            -#         %table.answers-table
-                                            -#           %tr
-                                            -#             %td.right-border{width: "50%"}
-                                            -#               -with inloop_counter0=forloop.counter0
-                                            -#                 -for stu_ans in student_answer
-                                            -#                   -if stu_ans.0 == inloop_counter0
-                                            -#                     -if ans.type != "text"
-                                            -#                       \\(
-                                            -#                         =stu_ans.1.0
-                                            -#                       \\)
-                                            -#                       (code latex : <code>{{ stu_ans.1.0 }}</code>)
-                                            -#                     -else
-                                            -#                       =stu_ans.1.0
-                                            -#             %td{width: "50%", display: "block"}
-                                            -#               -for answ in ans.answers
-                                            -#                   %ul
-                                            -#                     -if ans.type != "text"
-                                            -#                       %li
-                                            -#                         \\(
-                                            -#                         =answ.latex
-                                            -#                         \\)
-                                            -#                         (code latex : <code>{{ answ.latex }}</code>)
-                                            -#                     -else
-                                            -#                       %li=answ.text
+
 
                                         -elif type == "fill-table-blanks"
                                           -for ans in question.get_answer.answers
@@ -368,41 +339,6 @@
                                                                                   (code latex : <code>{{ answ.latex }}</code>)
                                                                               -else
                                                                                 %li=answ.text
-                                            -# %tr
-                                            -#   %td{colspan: 2}
-                                            -#     -with inloop_counter0=forloop.counter0
-                                            -#       .answers-panel.panel{class: "{% if correct == 1 %}panel-success{% elif correct == 0 %}panel-danger{% else %}panel-warning{% endif %}"}
-                                            -#         coucouici
-                                            -#         .panel-heading
-                                            -#           -with y=forloop.counter|stringformat:"s"
-                                            -#             -with template="#["|add:y|add:"]#"
-                                            -#               =template
-                                            -#         .panel-body.answers-panel
-                                            -#           %table.answers-table
-                                            -#             %tr
-                                            -#               %td.right-border{width: "50%"}
-                                            -#                 coucou
-                                            -#                 -for stu_ans in student_answer
-                                            -#                   =stu_ans
-                                            -#                   -if stu_ans.0 == inloop_counter0
-                                            -#                     -if ans.type != "text"
-                                            -#                       \\(
-                                            -#                         =stu_ans.1.0
-                                            -#                       \\)
-                                            -#                       (code latex : <code>{{ stu_ans.1.0 }}</code>)
-                                            -#                     -else
-                                            -#                       =stu_ans.1.0
-                                            -#               %td{width: "50%", display: "block"}
-                                            -#                 -for answ in ans.answers
-                                            -#                     %ul
-                                            -#                       -if ans.type != "text"
-                                            -#                         %li
-                                            -#                           \\(
-                                            -#                           =answ.latex
-                                            -#                           \\)
-                                            -#                           (code latex : <code>{{ answ.latex }}</code>)
-                                            -#                       -else
-                                            -#                         %li=answ.text
 
 
                                     %a.btn.btn-default.infos{id: "{{ question.id }}"} Afficher les sources/informations
