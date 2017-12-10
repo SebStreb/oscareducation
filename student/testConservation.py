@@ -10,6 +10,8 @@ import unittest, time, re
 
 login = "eleve.eleve"
 pwd = "eleve"
+idStudent = 1137
+
 
 loginProf = "prof"
 pwdProf = "prof"
@@ -34,24 +36,6 @@ class TestPersistance(unittest.TestCase):
         self.login = loginProf
         self.pwd = pwdProf
 
-
-    """def testQuest(self):
-
-        driver = self.driver
-        driver.get(self.base_url + "accounts/usernamelogin/")
-        driver.find_element_by_id("id_username").clear()
-        driver.find_element_by_id("id_username").send_keys(login)
-        driver.find_element_by_css_selector("input.btn.btn-primary").click()
-        driver.find_element_by_id("id_password").clear()
-        driver.find_element_by_id("id_password").send_keys(pwd)
-        driver.find_element_by_css_selector("input.btn.btn-primary").click()
-
-        driver.get("http://127.0.0.1:8000/student/test/732/")
-        elem = driver.find_element_by_xpath("//form/div/div/input")
-        print(elem)
-        elem.send_keys("5")
-        time.sleep(5)"""
-
     # Creation of question
     def testCreationQuestion(self):
         driver = self.driver
@@ -64,7 +48,7 @@ class TestPersistance(unittest.TestCase):
         driver.find_element_by_id("id_password").send_keys(pwdProf)
         driver.find_element_by_css_selector("input.btn.btn-primary").click()
 
-        # Click doesn't work, we have to enter the address probably because it's not a link with <a> but a javascript function.
+
         driver.find_element_by_xpath("//a[@href='/professor/lesson/134/']").click()
         driver.get("http://127.0.0.1:8000/professor/lesson/134/test/add/")
         driver.find_element_by_xpath("//a[@href='/professor/lesson/134/test/online/add/']").click()
@@ -104,17 +88,28 @@ class TestPersistance(unittest.TestCase):
         driver.find_element_by_xpath("//form/ul/li/div/div/div/input").send_keys("Indication")
         time.sleep(5)
         driver.find_element_by_id("validate-yaml").send_keys(Keys.ENTER)
-        driver.find_element_by_id("submit-pull-request").send_keys(Keys.ENTER)
+        time.sleep(20)
+        enonce = driver.find_element_by_xpath("//div[@ng-bind-html='htmlRendering']").text
 
+        #Check that the text are conserved in previsualisation
+        self.assertEqual(enonce,test.get("enonce"))
+
+        driver.find_element_by_id("submit-pull-request").send_keys(Keys.ENTER)
+        time.sleep(20)
         driver.find_element_by_link_text(u"Accéder au récapitulatif du test").send_keys(Keys.ENTER)
+        url = driver.current_url
+        urlTab = url.split("/")
+        idTest = urlTab[len(urlTab)-3]
+        print("idTest")
+        print(idTest)
+        print(url)
         driver.get("http://127.0.0.1:8000/professor/lesson/134/test/")
         driver.find_element_by_xpath("//table/tbody/tr/td/form/button").send_keys(Keys.ENTER)
         driver.switch_to.alert.accept()
         driver.get(self.base_url + "accounts/logout/")
-
         print("test created")
 
-        time.sleep(2)
+        #Answering to question
         driver = webdriver.Firefox()
         test = tests[0]
         driver.get(self.base_url + "accounts/usernamelogin/")
@@ -125,8 +120,12 @@ class TestPersistance(unittest.TestCase):
         driver.find_element_by_id("id_password").send_keys(pwd)
         driver.find_element_by_css_selector("input.btn.btn-primary").click()
         # driver.find_element_by_link_text(test.get("nomDuTest")).send_keys(Keys.ENTER)
+        time.sleep(10)
         driver.find_element_by_xpath("(//a[@class='list-group-item'])[last()]").send_keys(Keys.ENTER)
         time.sleep(2)
+        url2Tab = driver.current_url.split("/")
+        idTest2 = url2Tab[len(url2Tab)-2]
+        print(idTest2)
         driver.find_element_by_xpath("//form").submit()
         time.sleep(2)
         elem = driver.find_element_by_xpath("//form/div/div/input")
@@ -138,6 +137,8 @@ class TestPersistance(unittest.TestCase):
         time.sleep(2)
         driver.get(self.base_url + "accounts/logout/")
 
+
+        # Check the answer posted by student
         driver.get(self.base_url + "accounts/usernamelogin/")
         driver.find_element_by_id("id_username").clear()
         driver.find_element_by_id("id_username").send_keys(loginProf)
@@ -145,131 +146,23 @@ class TestPersistance(unittest.TestCase):
         driver.find_element_by_id("id_password").clear()
         driver.find_element_by_id("id_password").send_keys(pwdProf)
         driver.find_element_by_css_selector("input.btn.btn-primary").click()
+        driver.get("http://127.0.0.1:8000/professor/lesson/134/student/" + str(idStudent) + "/")
+        time.sleep(10)
+        #driver.find_element_by_xpath("(//li/a)[last()]").send_keys(Keys.ENTER) # Click on the test passed by the student
+        #driver.get("http://127.0.0.1:8000/professor/lesson/134/test/online/" + idTest + "/")
+        print("dd")
+        print(driver.current_url)
+        print(idTest2)
+        driver.get("http://127.0.0.1:8000/professor/lesson/134/student/"+str(idStudent)+"/test/"+ str(idTest2)+ "/")
+        print(driver.current_url)
+        time.sleep(10)
+        textContent = driver.find_element_by_class_name("exercice-content").text
+        self.assertEqual(test.get("enonce"),textContent)
+        reponse = driver.find_element_by_xpath("//td[@width='50%'][@class='right-border']").text
+        self.assertEqual(reponse,test.get("answers"))
         time.sleep(100)
 
-    # Test persistance of the question
-    """def testPersistanceQuestion(self):
 
-
-
-        time.sleep(100)
-
-    # Test the consistence of the enonce of the question (Is the text of the question the same that the text in creatting question
-    def testQuestionConsistence(self):
-        print("")
-
-    # Test if the response has been transmitted correctly and if it's correct.
-    def testAnswersPersistance(self):
-        print("")
-
-    def testPersistance(self):
-        driver = self.driver
-
-        # Connection
-        driver.get(self.base_url + "accounts/usernamelogin/")
-        driver.find_element_by_id("id_username").clear()
-        driver.find_element_by_id("id_username").send_keys(loginProf)
-        driver.find_element_by_css_selector("input.btn.btn-primary").click()
-        driver.find_element_by_id("id_password").clear()
-        driver.find_element_by_id("id_password").send_keys(pwdProf)
-        driver.find_element_by_css_selector("input.btn.btn-primary").click()
-
-        # Click doesn't work, we have to enter the address probably because it's not a link with <a> but a javascript function.
-        driver.find_element_by_xpath("//a[@href='/professor/lesson/134/']").click()
-        driver.get("http://127.0.0.1:8000/professor/lesson/134/test/add/")
-        driver.find_element_by_xpath("//a[@href='/professor/lesson/134/test/online/add/']").click()
-        # We select a test content
-        test = tests[0]
-        driver.find_element_by_id("test_name").send_keys(test.get("nomDuTest"))
-        driver.find_element_by_id("addSkillToTestButtonForStage9").click()
-        elem = driver.find_element_by_id("test_name")
-
-        # Here the click doesn't work too
-        try:
-            driver.find_element_by_id("id_create_test_button").click()
-
-        except:
-            print("fail")
-
-
-
-
-        # The click doesn't works
-        elem.send_keys(Keys.ENTER)
-        driver.execute_script('document.getElementById("id_create_test_button").click();')
-        print(driver.current_url)
-        wait = WebDriverWait(driver, 10)
-        print(driver.current_url)
-
-
-        # We pass directly to the question form creation.
-        driver.get(self.base_url + "professor/exercices/validation_form/#?for_test_exercice=14&code=S41eII")
-
-        driver.find_element_by_id("exercice-html")
-        elem = driver.find_element_by_id("exercice-html")
-        elem.send_keys(test.get("enonce"))
-
-
-        elem2 = driver.find_element_by_xpath("//form/ul/li/div/div/div/input")
-        elem2.send_keys(test.get("filling"))
-        self.assertEqual(driver.find_element_by_xpath("//form/ul/li/div/div/div/input").get_attribute('value'),
-                         test.get("filling"))
-        Select(driver.find_element_by_xpath("//li/div/div/div/select")).select_by_visible_text(u"Question à trous")
-        driver.find_element_by_css_selector("button.btn.btn-success").send_keys(Keys.ENTER)
-
-        element = driver.find_element_by_id("parserField")
-        element.send_keys(Keys.ENTER)
-        driver.find_element_by_xpath("//input[@type='text']").clear()
-        driver.find_element_by_xpath("//input[@type='text']").send_keys(test.get("answers"))
-        time.sleep(10)
-        driver.find_element_by_xpath("(//form/ul/li/div/div/div/textarea)[1]").send_keys(test.get("filling2"))
-
-        elem3 = driver.find_element_by_xpath("(//form/ul/li/div/div/div/textarea)[2]")
-        elem3.send_keys("Source")
-
-        elem4 = driver.find_element_by_xpath("//form/ul/li/div/div/div/input")
-        elem4.send_keys("Indication")
-        time.sleep(15)
-
-        driver.find_element_by_id("validate-yaml").send_keys(Keys.ENTER)
-        time.sleep(10)
-        driver.find_element_by_id("submit-pull-request").send_keys(Keys.ENTER)
-        time.sleep(5)
-        driver.find_element_by_link_text(u"Accéder au récapitulatif du test").send_keys(Keys.ENTER)
-        time.sleep(10)
-        driver.get("http://127.0.0.1:8000/professor/lesson/134/test/")
-        driver.find_element_by_xpath("//table/tbody/tr/td/form/button").send_keys(Keys.ENTER)
-        time.sleep(5)
-        driver.switch_to.alert.accept()
-        time.sleep(20)
-        driver.get(self.base_url + "accounts/logout/")
-
-    def testQuestion(self):
-        driver = self.driver
-        test = tests[0]
-        driver.get(self.base_url + "accounts/usernamelogin/")
-        driver.get(self.base_url + "accounts/usernamelogin/")
-        driver.find_element_by_id("id_username").clear()
-        driver.find_element_by_id("id_username").send_keys(login)
-        driver.find_element_by_css_selector("input.btn.btn-primary").click()
-        driver.find_element_by_id("id_password").clear()
-        driver.find_element_by_id("id_password").send_keys(pwd)
-        driver.find_element_by_css_selector("input.btn.btn-primary").click()
-        print(driver.current_url)
-        # div[@id='content']//table//tr[last()]//td[contains(text(),'service')][last()]/following-sibling::td[2]
-        driver.find_element_by_xpath("//div/div/div/div/a[last()]/span").click()
-        print(driver.current_url)
-        #driver.find_element_by_xpath("//div/div/div/div/a[last()]/").send_keys(Keys.ENTER)
-        #print(driver.current_url)
-        #driver.find_element_by_link_text(test.get("nomDuTest")).click()
-        driver.find_element_by_class_name("list-group-item")
-        driver.find_element_by_xpath("(//a[@class='list-group-item'])[last()]").send_keys(Keys.ENTER)
-        #driver.find_element_by_xpath("//button[@type='submit']").send_keys(Keys.ENTER)
-
-
-
-
-        time.sleep(7)"""
     def tearDown(self):
         self.driver.close()
 

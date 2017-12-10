@@ -33,7 +33,7 @@ class TestEditing(unittest.TestCase):
         self.driver.find_element_by_css_selector("input.btn.btn-primary").click()
 
 
-
+    # Tests the add test button
     def testAddTest(self):
         driver = self.driver
         driver.get("http://127.0.0.1:8000/professor/lesson/134/test/")
@@ -41,6 +41,7 @@ class TestEditing(unittest.TestCase):
         time.sleep(2)
         self.assertEqual("http://127.0.0.1:8000/professor/lesson/134/test/add/",driver.current_url)
 
+    # Tests the add competence button
     def testAddCompetence(self):
         driver = self.driver
         driver.get("http://127.0.0.1:8000/professor/lesson/134/test/online/add/")
@@ -50,7 +51,7 @@ class TestEditing(unittest.TestCase):
         elm = wait.until(EC.presence_of_element_located((By.XPATH, "//button[@class='btn btn-primary selected-skill ng-binding']")))
         self.assertEqual(elm.text,"S41eII")
 
-
+    # Tests the add test button and select an option
     def testAddCompetenceSelected(self):
         driver = self.driver
         driver.get("http://127.0.0.1:8000/professor/lesson/134/test/online/add/")
@@ -63,7 +64,7 @@ class TestEditing(unittest.TestCase):
         self.assertEqual(elm.text,"S11aII")
 
 
-
+    # Tests the 2 add buttons
     def testAdd2competences(self):
         driver = self.driver
         driver.get("http://127.0.0.1:8000/professor/lesson/134/test/online/add/")
@@ -82,7 +83,7 @@ class TestEditing(unittest.TestCase):
         self.assertEqual(elm.text,"S11aII")
         self.assertEqual(elm2.text, "S11aI")
 
-
+    # Tests the remove button
     def testRemoveCompetence(self):
         driver = self.driver
         driver.get("http://127.0.0.1:8000/professor/lesson/134/test/online/add/")
@@ -102,7 +103,7 @@ class TestEditing(unittest.TestCase):
         driver.find_element_by_xpath("(//button[@class='btn btn-primary selected-skill ng-binding'])[2]").click()
         self.assertEqual(elm.text, "S11aII")
 
-
+    # Tests the button create competence
     def testCreateCompetence(self):
         driver = self.driver
         driver.get("http://127.0.0.1:8000/professor/lesson/134/test/online/add/")
@@ -121,7 +122,7 @@ class TestEditing(unittest.TestCase):
 
 
 
-
+    # Tests the button of creation questions
     def testQuestionsTrous(self):
         driver = self.driver
         driver.get("http://127.0.0.1:8000/professor/lesson/134/test/online/add/")
@@ -139,14 +140,10 @@ class TestEditing(unittest.TestCase):
         wait = WebDriverWait(driver,10)
         elm2 = wait.until(
             EC.presence_of_element_located((By.XPATH,"//button[@title='Ajouter un champ']")))
-        print(elm2.text)
         driver.find_element_by_xpath("//button[@title='Ajouter un champ']").send_keys(Keys.ENTER)
         textArea = driver.find_element_by_id("blank-text0")
         time.sleep(5)
-        print(textArea.text)
 
-
-        time.sleep(2)
 
     def tearDown(self):
         self.driver.close()
