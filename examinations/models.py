@@ -286,7 +286,7 @@ class Answer(models.Model):
         for question in self.test_exercice.exercice.get_questions():
             student_answers = self.get_answers()[str(index)].get("response")
 
-            if question.get_type() == "fill-text-blanks" or question.get_type() == "fill-table-blanks":
+            if question.get_type() == "fill-text-blanks" or question.get_type() == "fill-table-blanks": #If the type is from blanks then reformat the student_answers for the view
                 student_answers = self.get_blanks_answers(student_answers, index)
 
             questions_with_answers.append(

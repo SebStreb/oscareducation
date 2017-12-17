@@ -187,11 +187,11 @@ def validate_exercice(request, test_student, test_exercice):
             elif data["type"] == "fill-text-blanks" or data["type"] == "fill-table-blanks":
                 num_blank = 0
                 raw_answer[number]["response"] = {}
-                for dic in question.get_answers():
-                    resp = request.POST.get("fill-"+str(number)+"-"+str(num_blank),False)
+                for dic in question.get_answers(): # For every filled answers
+                    resp = request.POST.get("fill-"+str(number)+"-"+str(num_blank),False) # Answer in the input box
                     list = []
                     list.append(resp)
-                    raw_answer[number]["response"][number+num_blank] = {"response_blank": list, "correct_blank": -1}
+                    raw_answer[number]["response"][number+num_blank] = {"response_blank": list, "correct_blank": -1} # Add the answer to raw_answer
                     num_blank += 1
             else:
                 raise Exception()
